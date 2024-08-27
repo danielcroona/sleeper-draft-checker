@@ -17,7 +17,7 @@ function DraftList({ drafts }) {
           </h5>
           <p>
             <strong>Round: </strong> {draft.currentRound} <br />
-            <strong>Currrently Picking: </strong> {draft.currentPickPosition} <br />
+            <strong>Currrently Picking: </strong> {draft.currentPickPosition} ({draft.currentClock} remaining) <br />
             {draft.isMyTurn ? (
               <strong className="text-success">Your turn to pick!</strong>
             ) : (

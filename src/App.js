@@ -29,6 +29,32 @@ function App() {
       setDrafts([]);
     }
   };
+
+
+
+  const formatMilliseconds = (milliseconds) => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const seconds = totalSeconds % 60;
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const minutes = totalMinutes % 60;
+    const hours = Math.floor(totalMinutes / 60);
+
+    let formattedTime = "";
+
+    if (hours > 0) {
+      formattedTime += `${hours}h `;
+    }
+
+    if (minutes > 0) {
+      formattedTime += `${minutes}min `;
+    }
+
+    if ((seconds > 0 && hours <= 0) || formattedTime === "") {
+      formattedTime += `${seconds}s`;
+    }
+
+    return formattedTime.trim();
+  };
   
 
   const fetchDrafts = async (userId) => {
@@ -48,7 +74,7 @@ function App() {
         if (!draftOrder) {
           return null;
         }
-  
+
         const picksResponse = await axios.get(`https://api.sleeper.app/v1/draft/${draft.draft_id}/picks`);
         const picksMade = picksResponse.data.length;
         const currentPickNo = picksMade + 1;
@@ -56,6 +82,7 @@ function App() {
         const currentRound = Math.ceil(currentPickNo / totalTeams);
         const picksInCurrentRound = currentPickNo % totalTeams || totalTeams;
         const reversalRound = draftResponse.data.settings.reversal_round || 0;
+        const pick_timer = draftResponse.data.settings.pick_timer || 120;
         
         let adjustedUserPosition;
   
@@ -104,7 +131,9 @@ function App() {
           // Användaren har ännu inte valt i denna runda
           picksUntilMyTurn = adjustedUserPosition - currentPickPosition;
         }
-  
+
+        const currentClock = formatMilliseconds((pick_timer * 1000) - (Date.now() - draftResponse.data.last_picked));
+
         return {
           draft_id: draft.draft_id,
           metadata: draftResponse.data.metadata,
@@ -114,6 +143,7 @@ function App() {
           picksUntilMyTurn: picksUntilMyTurn,
           currentRound: currentRound,
           currentPickPosition: currentPickPosition,
+          currentClock: currentClock,
         };
       }));
   
