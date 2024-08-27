@@ -13,7 +13,7 @@ function DraftList({ drafts }) {
           <h5>
             <a href={`https://sleeper.com/draft/nfl/${draft.draft_id}`} target="_blank" rel="noopener noreferrer">
               {draft.metadata.name}
-            </a>
+            </a> ({draft.metadata.scoring_type}, {draft.draftType}, {draft.status})
           </h5>
           <p>
             <strong>Round: </strong> {draft.currentRound} <br />

@@ -56,7 +56,7 @@ function App() {
         const currentRound = Math.ceil(currentPickNo / totalTeams);
         const picksInCurrentRound = currentPickNo % totalTeams || totalTeams;
         const reversalRound = draftResponse.data.settings.reversal_round || 0;
-  
+        
         let adjustedUserPosition;
   
         if (draftResponse.data.type === 'linear') {
@@ -108,6 +108,8 @@ function App() {
         return {
           draft_id: draft.draft_id,
           metadata: draftResponse.data.metadata,
+          draftType: draftResponse.data.type,
+          status: draft.status,
           isMyTurn: isMyTurn,
           picksUntilMyTurn: picksUntilMyTurn,
           currentRound: currentRound,
